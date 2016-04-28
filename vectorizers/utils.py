@@ -1,9 +1,8 @@
-import math
 import numpy as np
 import nltk
 
 from collections import Counter
-from nltk.corpus import sentiwordnet as swn
+
 from sklearn.preprocessing import label_binarize
 from random import shuffle
 
@@ -102,24 +101,3 @@ def get_tweets():
 
 	return (tweets, classifications)
 
-def get_sentiment(word):
-	synsets = list(swn.senti_synsets(word.lower()))
-	pos_score = sum(ss.pos_score() for ss in synsets)/float(len(synsets))
-	neg_score = sum(ss.neg_score() for ss in synsets)/float(len(synsets))
-	obj_score = sum(ss.obj_score() for ss in synsets)/float(len(synsets))
-	return {'pos_score': pos_score,
-			'neg_score': neg_score,
-			'obj_score': obj_score}
-
-part_of_speech = ['ADJ', 'ADP', 'ADV', 'CONJ', 'DET', 'NOUN', 'NUM', 'PRT', 'PRON', 'VERB', '.', 'X']
-def count_pos(text):
-	tokens = nltk.word_tokenize(text.lower())
-	text = nltk.Text(tokens)
-	tagged = nltk.pos_tag(text, tagset='universal')
-	counts = Counter(tag for word,tag in tagged)
-	total = sum(counts.values())
-	res = dict((word, float(count)/total) for word,count in counts.items())
-	for pos in part_of_speech:
-		if pos not in res:
-			res[pos] = 0
-	return res
