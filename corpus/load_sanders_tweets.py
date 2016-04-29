@@ -21,14 +21,15 @@ with open('sanders/corpus.csv', 'r') as corpus:
                 if os.path.isfile('sanders/rawdata/{0}.json'.format(filename)):
                     with open('sanders/rawdata/{0}.json'.format(filename), 'r') as tweet_file:
                         tweet = json.load(tweet_file)
-                        print(tweet['text'].replace('\n', ' '), file=tweets)
+                        print(tweet['text'].replace('\n', ' ').replace('\r', ''), file=tweets)
                         print(row[1], file=classification)
-                        
+                    
 tweets = []
 with open('sanders/tweets.txt', 'r') as file_tweets:
     for line in file_tweets:
         tweets.append(sanitize(line))
 
+
 with open('sanders/tweets.txt', 'w') as file_tweets:
-    for tweet in tweets:
+    for i, tweet in enumerate(tweets):
         file_tweets.write(tweet + "\n")

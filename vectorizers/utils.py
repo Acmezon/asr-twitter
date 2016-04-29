@@ -1,7 +1,5 @@
 import numpy as np
-import nltk
-
-from collections import Counter
+import math
 
 from sklearn.preprocessing import label_binarize
 from random import shuffle

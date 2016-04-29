@@ -12,7 +12,6 @@ from sklearn.metrics import precision_recall_curve
 from sklearn.metrics import average_precision_score
 
 def run(tweets, classifications, subtask, grid_search=True):
-
 	if len(tweets)!=len(classifications):
 		raise ValueError('Error: Tweet population size and classifications size not matching.')
 	
