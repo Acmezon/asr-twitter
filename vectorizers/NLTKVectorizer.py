@@ -7,7 +7,7 @@ from sklearn.base import BaseEstimator
 from sklearn.feature_extraction.text import VectorizerMixin
 from nltk.corpus import sentiwordnet as swn
 
-class Vectorizer(BaseEstimator, VectorizerMixin):
+class NLTKVectorizer(BaseEstimator, VectorizerMixin):
     """Convert a collection of text documents to a matrix of features
     This implementation produces a sparse representation of the counts using
     scipy.sparse.coo_matrix.
