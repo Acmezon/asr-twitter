@@ -36,7 +36,6 @@ class Vectorizer(BaseEstimator, VectorizerMixin):
             self.tokenizer = tokenizer
         else:
             self.tokenizer = nltk.word_tokenize
-        self.preprocessor = self.build_preprocessor()
         self.part_of_speech = self.get_feature_names()[3:]
         self.sentiments = {}
 
@@ -122,7 +121,10 @@ class Vectorizer(BaseEstimator, VectorizerMixin):
         -------
         self
         """
-        self.fit_transform(raw_documents)
+        for doc in raw_documents:
+            doc = self._remove_stop_words(self.build_preprocessor()(doc))
+            self._get_avg_sentiment(doc)
+
         return self
 
     def fit_transform(self, raw_documents, y=None):
@@ -143,7 +145,7 @@ class Vectorizer(BaseEstimator, VectorizerMixin):
         cols = []
         data = []
         for doc in raw_documents:
-            doc = self._remove_stop_words(self.preprocessor(doc))
+            doc = self._remove_stop_words(self.build_preprocessor()(doc))
 
             sentiment = self._get_avg_sentiment(doc)
             pos = self._count_pos(doc)
