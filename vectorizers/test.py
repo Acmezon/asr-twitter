@@ -1,6 +1,11 @@
-import vectorizer1
-import utils
+from vectorizer2 import Vectorizer2
 
-tweets, classifications = utils.get_tweets()
+v = Vectorizer2(stop_words='english')
+print(v)
 
-vectorizer1.run(tweets, classifications, subtask=1, grid_search=False)
+with open('data/tweets.txt') as f:
+    documentos = f.readlines()
+
+#documentos = ["This is text 1", "This is other hell of a bad text", "This is the best awesome text of life"]
+aux = v.fit_transform(documentos)
+print(aux)

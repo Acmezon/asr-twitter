@@ -1,5 +1,7 @@
-import math
 import numpy as np
+import nltk
+
+from collections import Counter
 
 from sklearn.preprocessing import label_binarize
 from random import shuffle
@@ -98,3 +100,4 @@ def get_tweets():
 		raise ValueError('Error: Tweet population size and classifications size not matching.')
 
 	return (tweets, classifications)
+
