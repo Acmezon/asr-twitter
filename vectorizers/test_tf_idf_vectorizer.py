@@ -19,8 +19,10 @@ def test(tweets, classifications, classifier, classifier_parameters):
         with open('test_results.txt', 'a') as results_file:
             if i == 1:
                 print("Positivo-Negativo. Clasificador: {0}".format(type(classifier).__name__), file=results_file)
+                print("Positivo-Negativo. Clasificador: {0}".format(type(classifier).__name__))
             else:
                 print("Sentimiento-sin sentimiento. Clasificador: {0}".format(type(classifier).__name__), file=results_file)
+                print("Sentimiento-sin sentimiento. Clasificador: {0}".format(type(classifier).__name__))
         
         population = utils.prepare_entr_tweets(tweets, classifications, i)
     
@@ -48,9 +50,12 @@ def test(tweets, classifications, classifier, classifier_parameters):
         
         with open('test_results.txt', 'a') as results_file:
             print("Best score: %0.3f" % grid_search.best_score_, file=results_file)
+            print("Best score: %0.3f" % grid_search.best_score_)
             print("Best parameters set:", file=results_file)
+            print("Best parameters set:")
             for param_name in sorted(parameters.keys()):
                 print("\t%s: %r" % (param_name, best_parameters[param_name]), file=results_file)
+                print("\t%s: %r" % (param_name, best_parameters[param_name]))
     
         if isinstance(classifier, MultinomialNB):
             clf = MultinomialNB(alpha=best_parameters['clf__alpha'])
@@ -82,36 +87,7 @@ def test(tweets, classifications, classifier, classifier_parameters):
         with open('test_results.txt', 'a') as results_file:
             print("\nPrecision:{0}\nRecall:{1}\nF1:{2}\n".format(
                 metrics[0], metrics[1], metrics[2]), file=results_file)
-        
-    with open('test_results.txt', 'a') as results_file:
-        print("##########################################\nTF-IDF Vectorizer tests\n##########################################\n\n", file=results_file)
-    
-    #Multinomial Classifier
-    classifier_parameters = {
-        'alpha': [0.001, 0.01, 0.05, 0.1, 0.2, 0.3, 0.5, 1]
-    }
-    
-    test(tweets, classifications, MultinomialNB(), classifier_parameters)
-    
-    #SVM Classifier
-    classifier_parameters = {
-        'C': [0.1, 0.2, 0.3, 0.5, 1, 1.5, 2, 2.5],
-        'kernel': ['linear', 'poly', 'rbf', 'sigmoid', 'precomputed'],
-        'shrinking': [True, False],
-        'decision_function_shape': ['ovo', 'ovr', None]
-    }
-    
-    test(tweets, classifications, SVC(), classifier_parameters)
-    
-    #Linear regression Classifier
-    classifier_parameters = {
-        'penalty': ['l1', 'l2'],
-        'C': [0.1, 0.2, 0.3, 0.5, 1, 1.5, 2, 2.5],
-        'fit_intercept' : [True, False],
-        'class_weight' : ['balanced', None],
-        'warm_start' : [True, False],
-        'solver' : ['liblinear', 'sag']
-    }
-    
-    test(tweets, classifications, LogisticRegression(), classifier_parameters)
+
+            print("\nPrecision:{0}\nRecall:{1}\nF1:{2}\n".format(
+                metrics[0], metrics[1], metrics[2]))
     

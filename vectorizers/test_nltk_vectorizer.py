@@ -18,8 +18,10 @@ def test(tweets, classifications, classifier, classifier_parameters):
         with open('test_results.txt', 'a') as results_file:
             if i == 1:
                 print("Positivo-Negativo. Clasificador: {0}".format(type(classifier).__name__), file=results_file)
+                print("Positivo-Negativo. Clasificador: {0}".format(type(classifier).__name__))
             else:
                 print("Sentimiento-sin sentimiento. Clasificador: {0}".format(type(classifier).__name__), file=results_file)
+                print("Sentimiento-sin sentimiento. Clasificador: {0}".format(type(classifier).__name__))
         
         population = utils.prepare_entr_tweets(tweets, classifications, i)
     
@@ -43,9 +45,12 @@ def test(tweets, classifications, classifier, classifier_parameters):
         
         with open('test_results.txt', 'a') as results_file:
             print("Best score: %0.3f" % grid_search.best_score_, file=results_file)
+            print("Best score: %0.3f" % grid_search.best_score_)
             print("Best parameters set:", file=results_file)
+            print("Best parameters set:")
             for param_name in sorted(parameters.keys()):
                 print("\t%s: %r" % (param_name, best_parameters[param_name]), file=results_file)
+                print("\t%s: %r" % (param_name, best_parameters[param_name]))
     
         if isinstance(classifier, MultinomialNB):
             clf = MultinomialNB(alpha=best_parameters['clf__alpha'])
@@ -62,10 +67,9 @@ def test(tweets, classifications, classifier, classifier_parameters):
                                      warm_start = best_parameters['clf__warm_start'],
                                      solver = best_parameters['clf__solver'])
             
-        pipeline = Pipeline([('nltk', NLTKVectorizer(stop_words=best_parameters['nltk__stop_words'],
-    			tokenizer=best_parameters['nltk__tokenizer'], ngram_range=best_parameters['nltk__ngram_range'],
-    			smooth_idf=best_parameters['nltk__smooth_idf'], use_idf=best_parameters['nltk__use_idf'],
-    			sublinear_tf=best_parameters['nltk__sublinear_tf'], binary=best_parameters['nltk__binary'])),
+        pipeline = Pipeline([('nltk', NLTKVectorizer(stop_words='english',
+                    tokenizer=EnglishTokenizer(), ngram_range=best_parameters['nltk__ngram_range'], 
+                    binary=best_parameters['nltk__binary'])),
     				   ('clf', clf)])
     
         pipeline.fit(population['train_tweets'], y=population['train_classif'])
@@ -77,3 +81,5 @@ def test(tweets, classifications, classifier, classifier_parameters):
         with open('test_results.txt', 'a') as results_file:
             print("\nPrecision:{0}\nRecall:{1}\nF1:{2}\n".format(
                 metrics[0], metrics[1], metrics[2]), file=results_file)    
+            print("\nPrecision:{0}\nRecall:{1}\nF1:{2}\n".format(
+                metrics[0], metrics[1], metrics[2]))  
