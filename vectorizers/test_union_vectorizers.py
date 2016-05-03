@@ -2,78 +2,131 @@ import matplotlib.pyplot as plt
 import numpy as np
 import utils
 
-from english_stemmer import EnglishTokenizer
-from custom_vectorizer import Vectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import Pipeline, FeatureUnion
-from sklearn.metrics import precision_recall_fscore_support, accuracy_score, roc_auc_score
-from sklearn.metrics import precision_recall_curve
-from sklearn.metrics import average_precision_score
+from NLTKVectorizer import NLTKVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.grid_search import GridSearchCV
+from sklearn.cross_validation import KFold
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+from english_stemmer import EnglishTokenizer
+from sklearn.metrics import precision_recall_fscore_support
 
-def run(tweets, classifications):
+def run(tweets, classifications, classifier, classifier_parameters):
     if len(tweets)!=len(classifications):
         raise ValueError('Error: Tweet population size and classifications size not matching.')
     
-    population = utils.prepare_entr_tweets(tweets, classifications, 2)
-    
-    vectorizer = FeatureUnion([('tfidf', TfidfVectorizer(
-                                            stop_words='english',
-                                            tokenizer=EnglishTokenizer(),
-                                            ngram_range=(1, 3),
-                                            use_idf=False)),
-                               ('sent', Vectorizer(
-                                           stop_words='english',
-                                           tokenizer=EnglishTokenizer(),
-                                           ngram_range=(1, 3),))])
-
-    pipeline = Pipeline([('vect', vectorizer),
-                   ('clf', MultinomialNB())])
-
-    pipeline.fit(population['train_tweets'], y=population['train_classif'])
-    
-    predicted = pipeline.predict(population['val_tweets'])
-    
-    metrics = precision_recall_fscore_support(population['val_classif'], predicted, average='macro', pos_label=None)
-    
-    print("Exactitud:{0}\nPrecision:{1}\nRecall:{2}\nF1:{3}".format(
-        accuracy_score(population['val_classif'], predicted), metrics[0], metrics[1], metrics[2]))
-    
-    score = pipeline.predict_proba(population['val_tweets'])[:, 0]
-
-    print("AUC:{0}".format(average_precision_score(population['val_classif_bin'], score, average="micro")))
-    
-    precision = dict()
-    recall = dict()
-    average_precision = dict()
-    
-    # Compute micro-average ROC curve and ROC area
-    precision["micro"], recall["micro"], _ = precision_recall_curve(
-                                                population['val_classif_bin'], score)
-    average_precision["micro"] = average_precision_score(population['val_classif_bin'], score,
-                                                         average="micro")
-    
-    # Plot Precision-Recall curve for each class
-    plt.clf()
-    plt.plot(recall["micro"], precision["micro"],
-             label='Precision-recall curve (area = {0:0.2f})'
-                   ''.format(average_precision["micro"]))
-    plt.xlim([0.0, 1.0])
-    plt.ylim([0.0, 1.05])
-    plt.xlabel('Recall')
-    plt.ylabel('Precision')
-    plt.title('Precision-Recall curve')
-    plt.legend(loc="lower right")
-    plt.show()
-    
-if __name__ == "__main__":
-    tweets = None
-    classifications = None
-    
-    with open('../corpus/sanders/tweets.txt', 'r') as tweets_file:
-        tweets = np.array(tweets_file.read().splitlines() )
+    for i in range(1, 3):
+        with open('test_results.txt', 'a') as results_file:
+            if i == 1:
+                print("Positivo-Negativo. Clasificador: {0}".format(type(classifier).__name__), file=results_file)
+                print("Positivo-Negativo. Clasificador: {0}".format(type(classifier).__name__))
+            else:
+                print("Sentimiento-sin sentimiento. Clasificador: {0}".format(type(classifier).__name__), file=results_file)
+                print("Sentimiento-sin sentimiento. Clasificador: {0}".format(type(classifier).__name__))
         
-    with open('../corpus/sanders/classification.txt', 'r') as classifications_file:
-        classifications = np.array(classifications_file.read().splitlines())
+        population = utils.prepare_entr_tweets(tweets, classifications, i)
+        
+        if isinstance(classifier, MultinomialNB):
+            if i == 1:
+                tfidf = TfidfVectorizer(stop_words='english', tokenizer = EnglishTokenizer(),
+                                        binary=False, ngram_range=(1, 2),
+                                        smooth_idf=True, sublinear_tf=False,
+                                        use_idf=True)
+                
+                nltk_vect = NLTKVectorizer(binary=True, ngram_range=(1, 1))
+            else:
+                tfidf = TfidfVectorizer(stop_words='english', tokenizer = EnglishTokenizer(),
+                                        binary=True, ngram_range=(1, 2),
+                                        smooth_idf=True, sublinear_tf=True,
+                                        use_idf=False)
+
+                nltk_vect = NLTKVectorizer(binary=True, ngram_range=(1, 1))
+        elif isinstance(classifier, SVC):
+            if i == 1:
+                tfidf = TfidfVectorizer(stop_words='english', tokenizer = EnglishTokenizer(),
+                                        binary=True, ngram_range=(1, 1),
+                                        smooth_idf=True, sublinear_tf=True,
+                                        use_idf=True)
+                
+                nltk_vect = NLTKVectorizer(binary=True, ngram_range=(1, 1))
+            else:
+                tfidf = TfidfVectorizer(stop_words='english', tokenizer = EnglishTokenizer(),
+                                        binary=False, ngram_range=(1, 2),
+                                        smooth_idf=True, sublinear_tf=True,
+                                        use_idf=False)
+
+                nltk_vect = NLTKVectorizer(binary=True, ngram_range=(1, 1))
+        elif isinstance(classifier, LogisticRegression):
+            if i == 1:
+                tfidf = TfidfVectorizer(stop_words='english', tokenizer = EnglishTokenizer(),
+                                        binary=False, ngram_range=(1, 1),
+                                        smooth_idf=False, sublinear_tf=False,
+                                        use_idf=True)
+                
+                nltk_vect = NLTKVectorizer(binary=True, ngram_range=(1, 1))
+            else:
+                tfidf = TfidfVectorizer(stop_words='english', tokenizer = EnglishTokenizer(),
+                                        binary=True, ngram_range=(1, 2),
+                                        smooth_idf=True, sublinear_tf=True,
+                                        use_idf=True)
+
+                nltk_vect = NLTKVectorizer(binary=True, ngram_range=(1, 1))
+                                        
+        vectorizer = FeatureUnion([('tfidf', tfidf),
+                                   ('sent', nltk_vect)])
     
-    run(tweets, classifications)
+        pipeline = Pipeline([('vect', vectorizer),
+                             ('clf', classifier)])
+    
+        parameters = {}
+    
+        for key, value in classifier_parameters.items():
+            parameters['clf__{0}'.format(key)] = value
+        
+        grid_search = GridSearchCV(pipeline, parameters, verbose=1,
+            cv=KFold(population['tweets'].size, n_folds=6, shuffle=True))
+        
+        grid_search.fit(population['tweets'], population['classifications'])
+        
+        best_parameters = grid_search.best_estimator_.get_params()
+        
+        with open('test_results.txt', 'a') as results_file:
+            print("Best score: %0.3f" % grid_search.best_score_, file=results_file)
+            print("Best score: %0.3f" % grid_search.best_score_)
+            print("Best parameters set:", file=results_file)
+            print("Best parameters set:")
+            for param_name in sorted(parameters.keys()):
+                print("\t%s: %r" % (param_name, best_parameters[param_name]), file=results_file)
+                print("\t%s: %r" % (param_name, best_parameters[param_name]))
+    
+        if isinstance(classifier, MultinomialNB):
+            clf = MultinomialNB(alpha=best_parameters['clf__alpha'])
+        elif isinstance(classifier, SVC):
+            clf = SVC(C=best_parameters['clf__C'],
+                      kernel = best_parameters['clf__kernel'],
+                      shrinking = best_parameters['clf__shrinking'],
+                      decision_function_shape = best_parameters['clf__decision_function_shape'])
+        elif isinstance(classifier, LogisticRegression):
+            clf = LogisticRegression(penalty = best_parameters['clf__penalty'],
+                                     C = best_parameters['clf__C'],
+                                     fit_intercept = best_parameters['clf__fit_intercept'],
+                                     class_weight = best_parameters['clf__class_weight'],
+                                     warm_start = best_parameters['clf__warm_start'],
+                                     solver = best_parameters['clf__solver'])
+            
+        pipeline = Pipeline([('vect', vectorizer),
+                             ('clf', clf)])
+    
+        pipeline.fit(population['train_tweets'], y=population['train_classif'])
+        
+        predicted = pipeline.predict(population['val_tweets'])
+        
+        metrics = precision_recall_fscore_support(population['val_classif'], predicted, average='macro', pos_label=None)
+        
+        with open('test_results.txt', 'a') as results_file:
+            print("\nPrecision:{0}\nRecall:{1}\nF1:{2}\n".format(
+                metrics[0], metrics[1], metrics[2]), file=results_file)    
+            print("\nPrecision:{0}\nRecall:{1}\nF1:{2}\n".format(
+                metrics[0], metrics[1], metrics[2]))

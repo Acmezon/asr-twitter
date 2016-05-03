@@ -36,7 +36,7 @@ def test(tweets, classifications, classifier, classifier_parameters):
         for key, value in classifier_parameters.items():
             parameters['clf__{0}'.format(key)] = value
         
-        grid_search = GridSearchCV(pipeline, parameters, n_jobs=4, verbose=1,
+        grid_search = GridSearchCV(pipeline, parameters, verbose=1,
             cv=KFold(population['tweets'].size, n_folds=6, shuffle=True))
         
         grid_search.fit(population['tweets'], population['classifications'])

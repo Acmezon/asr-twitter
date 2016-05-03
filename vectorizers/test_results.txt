@@ -1,0 +1,201 @@
+##########################################
+TF-IDF Vectorizer tests
+##########################################
+
+
+Positivo-Negativo. Clasificador: MultinomialNB
+Best score: 0.827
+Best parameters set:
+	clf__alpha: 1
+	tfidf__binary: False
+	tfidf__ngram_range: (1, 2)
+	tfidf__smooth_idf: True
+	tfidf__stop_words: 'english'
+	tfidf__sublinear_tf: False
+	tfidf__tokenizer: <english_stemmer.EnglishTokenizer object at 0x7f00faf18ba8>
+	tfidf__use_idf: True
+
+Precision:0.782060878243513
+Recall:0.775974025974026
+F1:0.7773632300247497
+
+Sentimiento-sin sentimiento. Clasificador: MultinomialNB
+Best score: 0.775
+Best parameters set:
+	clf__alpha: 0.1
+	tfidf__binary: True
+	tfidf__ngram_range: (1, 2)
+	tfidf__smooth_idf: True
+	tfidf__stop_words: 'english'
+	tfidf__sublinear_tf: True
+	tfidf__tokenizer: <english_stemmer.EnglishTokenizer object at 0x7f00fbef3cf8>
+	tfidf__use_idf: False
+
+Precision:0.7325389247943596
+Recall:0.6764124136394027
+F1:0.6907489399583011
+
+
+Positivo-Negativo. Clasificador: SVC
+Best score: 0.828
+Best parameters set:
+	clf__C: 1
+	clf__decision_function_shape: 'ovo'
+	clf__kernel: 'linear'
+	clf__shrinking: True
+	tfidf__binary: True
+	tfidf__ngram_range: (1, 1)
+	tfidf__smooth_idf: True
+	tfidf__stop_words: 'english'
+	tfidf__sublinear_tf: True
+	tfidf__tokenizer: <english_stemmer.EnglishTokenizer object at 0x7fa290ca73c8>
+	tfidf__use_idf: True
+
+Precision:0.7768707482993198
+Recall:0.7768707482993198
+F1:0.7768707482993198
+
+Sentimiento-sin sentimiento. Clasificador: SVC
+Best score: 0.798
+Best parameters set:
+	clf__C: 2.5
+	clf__decision_function_shape: 'ovo'
+	clf__kernel: 'linear'
+	clf__shrinking: True
+	tfidf__binary: False
+	tfidf__ngram_range: (1, 2)
+	tfidf__smooth_idf: True
+	tfidf__stop_words: 'english'
+	tfidf__sublinear_tf: True
+	tfidf__tokenizer: <english_stemmer.EnglishTokenizer object at 0x7fa278626978>
+	tfidf__use_idf: False
+
+Precision:0.7615717979533122
+Recall:0.7309238023791662
+F1:0.7417435194416748
+
+Positivo-Negativo. Clasificador: LogisticRegression
+Best score: 0.829
+Best parameters set:
+	clf__C: 2
+	clf__class_weight: 'balanced'
+	clf__fit_intercept: True
+	clf__penalty: 'l2'
+	clf__warm_start: True
+	tfidf__binary: False
+	tfidf__ngram_range: (1, 1)
+	tfidf__smooth_idf: False
+	tfidf__stop_words: 'english'
+	tfidf__sublinear_tf: False
+	tfidf__tokenizer: <english_stemmer.EnglishTokenizer object at 0x7f7cd6728860>
+	tfidf__use_idf: True
+
+Precision:0.8164965986394558
+Recall:0.8183528836754643
+F1:0.815187412672377
+
+Sentimiento-sin sentimiento. Clasificador: LogisticRegression
+Best score: 0.783
+Best parameters set:
+	clf__C: 2.5
+	clf__class_weight: None
+	clf__fit_intercept: True
+	clf__penalty: 'l2'
+	clf__warm_start: True
+	tfidf__binary: True
+	tfidf__ngram_range: (1, 2)
+	tfidf__smooth_idf: True
+	tfidf__stop_words: 'english'
+	tfidf__sublinear_tf: True
+	tfidf__tokenizer: <english_stemmer.EnglishTokenizer object at 0x7f7ccc8847b8>
+	tfidf__use_idf: True
+
+Precision:0.7452814314159912
+Recall:0.6911798458932182
+F1:0.7055077778703864
+
+##########################################
+NLTK Vectorizer tests
+##########################################
+
+
+Positivo-Negativo. Clasificador: MultinomialNB
+Best score: 0.530
+Best parameters set:
+	clf__alpha: 0.001
+	nltk__binary: True
+	nltk__ngram_range: (1, 1)
+
+Precision:0.25261324041811845
+Recall:0.5
+F1:0.3356481481481481
+
+Sentimiento-sin sentimiento. Clasificador: MultinomialNB
+Best score: 0.688
+Best parameters set:
+	clf__alpha: 0.001
+	nltk__binary: True
+	nltk__ngram_range: (1, 1)
+
+Precision:0.33930510314875134
+Recall:0.5
+F1:0.40426908150064683
+
+Positivo-Negativo. Clasificador: SVC
+Best score: 0.591
+Best parameters set:
+	clf__C: 2.5
+	clf__decision_function_shape: 'ovo'
+	clf__kernel: 'linear'
+	clf__shrinking: True
+	nltk__binary: True
+	nltk__ngram_range: (1, 1)
+
+Precision:0.604107142857143
+Recall:0.6015881708652793
+F1:0.581469959167801
+
+Sentimiento-sin sentimiento. Clasificador: SVC
+Best score: 0.688
+Best parameters set:
+	clf__C: 0.1
+	clf__decision_function_shape: 'ovo'
+	clf__kernel: 'linear'
+	clf__shrinking: True
+	nltk__binary: True
+	nltk__ngram_range: (1, 1)
+
+Precision:0.3501628664495114
+Recall:0.5
+F1:0.41187739463601536
+
+Positivo-Negativo. Clasificador: LogisticRegression
+Best score: 0.655
+Best parameters set:
+	clf__C: 2
+	clf__class_weight: 'balanced'
+	clf__fit_intercept: True
+	clf__penalty: 'l1'
+	clf__warm_start: True
+	nltk__binary: True
+	nltk__ngram_range: (1, 1)
+
+Precision:0.6447935016637307
+Recall:0.6442007797270954
+F1:0.6410452563962454
+
+Sentimiento-sin sentimiento. Clasificador: LogisticRegression
+Best score: 0.703
+Best parameters set:
+	clf__C: 2.5
+	clf__class_weight: None
+	clf__fit_intercept: True
+	clf__penalty: 'l2'
+	clf__warm_start: True
+	nltk__binary: True
+	nltk__ngram_range: (1, 1)
+
+Precision:0.7148724992225562
+Recall:0.546969885797154
+F1:0.5148771504885777
+

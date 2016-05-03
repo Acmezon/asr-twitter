@@ -53,10 +53,24 @@ logreg_parameters = {
 
 
 ###### NLTK #######
-with open('test_results.txt', 'a') as results_file:
-    print("##########################################\nNLTK Vectorizer tests\n##########################################\n\n", file=results_file)
-    print("##########################################\nNLTK Vectorizer tests\n##########################################\n\n")
+# with open('test_results.txt', 'a') as results_file:
+#    print("##########################################\nNLTK Vectorizer tests\n##########################################\n\n", file=results_file)
+#    print("##########################################\nNLTK Vectorizer tests\n##########################################\n\n")
 
+#Multinomial Classifier
+# test_nltk(tweets, classifications, MultinomialNB(), multinomial_parameters)
+
+#SVM Classifier
+# test_nltk(tweets, classifications, SVC(), svm_parameters)
+
+#Logistic regression Classifier
+# test_nltk(tweets, classifications, LogisticRegression(), logreg_parameters)
+
+###### Union #######
+with open('test_results.txt', 'a') as results_file:
+    print("##########################################\nUnion Vectorizer tests\n##########################################\n\n", file=results_file)
+    print("##########################################\nUnion  Vectorizer tests\n##########################################\n\n")
+    
 #Multinomial Classifier
 test_nltk(tweets, classifications, MultinomialNB(), multinomial_parameters)
 
