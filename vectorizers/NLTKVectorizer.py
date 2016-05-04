@@ -32,10 +32,7 @@ class NLTKVectorizer(BaseEstimator, VectorizerMixin):
         self.stop_words = stop_words
         self.ngram_range = ngram_range
         self.vocabulary = vocabulary
-        if tokenizer:
-            self.tokenizer = tokenizer
-        else:
-            self.tokenizer = nltk.word_tokenize
+        self.tokenizer = nltk.word_tokenize
         self.part_of_speech = self.get_feature_names()[3:]
         self.sentiments = {}
 

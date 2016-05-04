@@ -25,8 +25,7 @@ def test(tweets, classifications, classifier, classifier_parameters):
         
         population = utils.prepare_entr_tweets(tweets, classifications, i)
     
-        pipeline = Pipeline([('nltk', NLTKVectorizer(tokenizer=EnglishTokenizer(),
-                                                     stop_words='english')),
+        pipeline = Pipeline([('nltk', NLTKVectorizer(stop_words='english')),
                        ('clf', classifier)])
     
         parameters = {'nltk__ngram_range': [(1, 1), (1, 2), (1, 3)],
