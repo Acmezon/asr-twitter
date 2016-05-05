@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
 import tweepy
 import time
 from StreamListener import TwitterListener
@@ -15,11 +16,15 @@ api = tweepy.API(auth)
 
 while True:
     try:
-        print("Waking up!")
+        with open('logs/streamer.log', 'w') as log:
+            print("{0}: Waking up!".format(datetime.now().strftime("%Y-%m-%d %H:%M:%S")), file=log)
+
         myStreamListener = TwitterListener(api)
         myStream = tweepy.Stream(auth = api.auth, listener=myStreamListener)
         
-        myStream.filter(languages=['en'], track=['Goodell'])
+        myStream.filter(languages=['en'], track=['#pollingday'])
     except TimeoutError:
-        print("Going to sleep...")
+        with open('logs/streamer.log', 'w') as log:
+            print("{0}: Going to sleep...".format(datetime.now().strftime("%Y-%m-%d %H:%M:%S")), file=log)
+
         time.sleep(15 * 60)

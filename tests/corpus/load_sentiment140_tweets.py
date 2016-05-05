@@ -14,7 +14,7 @@ with io.open('sentiment140/tweets.csv', 'rt', encoding='latin-1') as corpus:
         with open('sentiment140/classification.txt', 'w') as classification:
             for row in reader:
                 tweet_text = row[-1]
-                print(tweet_text.replace('\n', ' '), file=tweets)
+                print(tweet_text.replace('\n', ' ').replace('\r', ''), file=tweets)
                 
                 sentiment = int(row[0])
                 
@@ -33,5 +33,5 @@ with open('sentiment140/tweets.txt', 'r') as file_tweets:
         tweets.append(sanitize(line))
 
 with open('sentiment140/tweets.txt', 'w') as file_tweets:
-    for i, tweet in tweets:
+    for tweet in tweets:
         file_tweets.write(tweet + "\n")

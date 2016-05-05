@@ -49,6 +49,7 @@ emojis = {
 	"D:": "horror",
 	"D8": "horror",
 	"D;": "horror",
+      ";d": "horror",
 	"D=": "horror",
 	"DX": "horror",
 	"v.v": "horror",
